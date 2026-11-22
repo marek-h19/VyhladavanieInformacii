@@ -1,0 +1,11 @@
+﻿data/
+data.zip
+.idea/
+.venv/
+__pycache__/
+*.pyc
+*.zip
+index_lucene/
+join_*.txt
+wiki_*.txt
+extract_spark.txt
