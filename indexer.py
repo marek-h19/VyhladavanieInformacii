@@ -207,6 +207,9 @@ def main():
     p_search.add_argument("query", nargs="?")
     p_search.add_argument("--idf", choices=list(IDF_METHODS), default="classic")
     p_search.add_argument("-k", type=int, default=10)
+    p_search.add_argument("--engine", choices=["old", "lucene"], default="old",
+                          help="old: own TF index (default); lucene: PyLucene index "
+                               "(python lucene_search.py build; needs PyLucene, see README)")
     p_cmp = sub.add_parser("compare", help="compare IDF methods on several queries")
     p_cmp.add_argument("queries", nargs="*")
     p_cmp.add_argument("-k", type=int, default=10)
@@ -218,6 +221,10 @@ def main():
         print(f"index built in {meta['build_seconds']} s: {meta['documents']} documents, "
               f"{meta['vocabulary']} terms, {meta['postings']} postings, "
               f"{size / 1024 / 1024:.1f} MB on disk")
+        return
+    if args.command == "search" and args.engine == "lucene":
+        from lucene_search import run_search          # imported here: needs PyLucene
+        run_search(args.query, args.k)
         return
     index = Index()
     if args.command == "compare":
